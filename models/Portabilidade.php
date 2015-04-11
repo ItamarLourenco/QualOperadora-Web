@@ -118,7 +118,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                     {
                         $ddd = substr($item, 0, 2);
                         $telefonesNaoPortadosComDDD[$i]['ddd'] = $ddd;
-                        $prefixos = $this->getPrefixo($item);
+                        $prefixos = $this->getPrefixo($item, $ddd);
                         $telefonesNaoPortadosComDDD[$i]['prefixo'] = $prefixos;
                     }
 
@@ -170,12 +170,15 @@ class Portabilidade extends \yii\db\ActiveRecord
             ->all();
     }
 
-    private function getPrefixo($item)
+    private function getPrefixo($item, $ddd)
     {
         $prefixo = null;
         if(strlen($item) == 10)
         {
-            $prefixo = '9'.substr($item, 2, 4);
+            if($this->addNonoDigito($ddd))
+            {
+                $prefixo = '9'.substr($item, 2, 4);
+            }
         }
         else if(strlen($item) == 11)
         {
@@ -219,11 +222,22 @@ class Portabilidade extends \yii\db\ActiveRecord
     private function getRn1Anterior($telefone = null)
     {
         $ddd = substr($telefone, 0, 2);
-        $prefixos = $this->getPrefixo($telefone);
+        $prefixos = $this->getPrefixo($telefone, $ddd);
 
         $prefixos = Prefixos::find()->select(['prefixos.id', 'prefixos.operadora', 'prefixos.rn1', 'prefixos.ddd', 'prefixos.uf', 'prefixos.prefixo'])
             ->where(['ddd' => $ddd, 'prefixo' => $prefixos])->one();
 
         return str_replace("'", null, $prefixos->operadora);
+    }
+
+    private function addNonoDigito($ddd)
+    {
+        $ddd = (string) $ddd;
+        $dddNaoAceitaNono = "31, 32, 33, 34, 35, 37, 38, 71, 73, 74, 75, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51, 53, 54, 55, 61,62, 63, 64, 65, 66, 67, 68, 69";
+        if(strpos($dddNaoAceitaNono, $ddd) == ""){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

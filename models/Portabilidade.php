@@ -222,12 +222,16 @@ class Portabilidade extends \yii\db\ActiveRecord
     private function getRn1Anterior($telefone = null)
     {
         $ddd = substr($telefone, 0, 2);
-        $prefixos = $this->getPrefixo($telefone, $ddd);
+        $prefixo = $this->getPrefixo($telefone, $ddd);
 
         $prefixos = Prefixos::find()->select(['prefixos.id', 'prefixos.operadora', 'prefixos.rn1', 'prefixos.ddd', 'prefixos.uf', 'prefixos.prefixo'])
-            ->where(['ddd' => $ddd, 'prefixo' => $prefixos])->one();
+            ->where(['ddd' => $ddd, 'prefixo' => $prefixo])->one();
+        
+        if($prefixos != null){
+            return str_replace("'", null, $prefixos->operadora);
+        }
+        return null;
 
-        return str_replace("'", null, $prefixos->operadora);
     }
 
     private function addNonoDigito($ddd)

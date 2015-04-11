@@ -102,7 +102,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                         'encontrado' => true,
                         'date' => date('d/m/Y H:i:s', strtotime($item->date)),
                         'rn1' => $item->rn1,
-                        'rn1_anterior' => $this->getRn1Anterior($item->phone),
+                        'operadora_anterior' => $this->getRn1Anterior($item->phone),
                         'operadora' => str_replace("'", null, $item->operadoras[0]->operadora)
                     ];
                 }
@@ -224,6 +224,6 @@ class Portabilidade extends \yii\db\ActiveRecord
         $prefixos = Prefixos::find()->select(['prefixos.id', 'prefixos.operadora', 'prefixos.rn1', 'prefixos.ddd', 'prefixos.uf', 'prefixos.prefixo'])
             ->where(['ddd' => $ddd, 'prefixo' => $prefixos])->one();
 
-        return $prefixos->rn1;
+        return $prefixos->operadora;
     }
 }

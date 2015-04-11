@@ -175,7 +175,7 @@ class Portabilidade extends \yii\db\ActiveRecord
         $prefixo = null;
         if(strlen($item) == 10)
         {
-            $prefixo = substr($item, 2, 4);
+            $prefixo = '9'.substr($item, 2, 4);
         }
         else if(strlen($item) == 11)
         {

@@ -118,7 +118,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                     {
                         $ddd = substr($item, 0, 2);
                         $telefonesNaoPortadosComDDD[$i]['ddd'] = $ddd;
-                        $prefixos = $this->getPrefixo($item, $ddd);
+                        $prefixos = $this->getPrefixo($item);
                         $telefonesNaoPortadosComDDD[$i]['prefixo'] = $prefixos;
                     }
 
@@ -170,22 +170,20 @@ class Portabilidade extends \yii\db\ActiveRecord
             ->all();
     }
 
-    private function getPrefixo($item, $ddd)
+    private function getPrefixo($item)
     {
-        $prefixo = null;
-        if(strlen($item) == 10)
-        {
-            if($this->addNonoDigito($ddd))
-            {
-                $prefixo = '9'.substr($item, 2, 4);
-            }
-        }
-        else if(strlen($item) == 11)
-        {
-            $prefixo = substr($item, 2, 5);
-        }
+	$item = substr($item, 2);
+	$phone = substr($item, -8);
+	$phone = substr($phone, 0, 4);
 
-        return $prefixo;
+	if(substr($item, -9, 1) == '9')
+	{
+	    return '9'.$phone;
+	}
+	else
+	{
+	    return $phone;
+	}
     }
 
     private function getNaoPortados($telefonesNaoPortadosComDDD)

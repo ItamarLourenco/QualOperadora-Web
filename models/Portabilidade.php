@@ -83,7 +83,7 @@ class Portabilidade extends \yii\db\ActiveRecord
         {
             $telefonesPortabilidade = array_fill_keys($this->getTelefone(), true); //Setando todos o numeros como nao portado
 
-            $portabilidade = $this->getPostabilidadeByTelefones();
+            $portabilidade = $this->getPortabilidadeByTelefones();
 
             $dataJson  = array();
 
@@ -161,7 +161,7 @@ class Portabilidade extends \yii\db\ActiveRecord
         return $dataJson;
     }
 
-    private function getPostabilidadeByTelefones()
+    private function getPortabilidadeByTelefones()
     {
         return Portabilidade::find()
             ->select(['portabilidade.id', 'portabilidade.phone', 'portabilidade.date', 'portabilidade.rn1', 'operadoras.operadora'])

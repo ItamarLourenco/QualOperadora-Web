@@ -105,6 +105,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                         'operadora_anterior' => $this->getRn1Anterior($item->phone),
                         'operadora' => str_replace("'", null, $item->operadoras[0]->operadora)
                     ];
+                    $this->saveLogger((string) $item->phone, Loggers::FOUND_YES);
                 }
 
 
@@ -138,6 +139,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                             'prefixo' => $item->prefixo,
                             'operadora' => str_replace("'", null, $item->operadora)
                         ];
+                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_YES);
                     }
 
                     $telefonesNaoEncontrados = array_filter($telefonesNaoEncontrados);
@@ -148,6 +150,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                             'portabilidade' => false,
                             'encontrado' => false,
                         ];
+                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_NO);
                     }
 
                 }
@@ -172,18 +175,18 @@ class Portabilidade extends \yii\db\ActiveRecord
 
     private function getPrefixo($item)
     {
-	$item = substr($item, 2);
-	$phone = substr($item, -8);
-	$phone = substr($phone, 0, 4);
+        $item = substr($item, 2);
+        $phone = substr($item, -8);
+        $phone = substr($phone, 0, 4);
 
-	if(substr($item, -9, 1) == '9')
-	{
-	    return '9'.$phone;
-	}
-	else
-	{
-	    return $phone;
-	}
+        if(substr($item, -9, 1) == '9')
+        {
+            return '9'.$phone;
+        }
+        else
+        {
+            return $phone;
+        }
     }
 
     private function getNaoPortados($telefonesNaoPortadosComDDD)
@@ -224,7 +227,7 @@ class Portabilidade extends \yii\db\ActiveRecord
 
         $prefixos = Prefixos::find()->select(['prefixos.id', 'prefixos.operadora', 'prefixos.rn1', 'prefixos.ddd', 'prefixos.uf', 'prefixos.prefixo'])
             ->where(['ddd' => $ddd, 'prefixo' => $prefixo])->one();
-        
+
         if($prefixos != null){
             return str_replace("'", null, $prefixos->operadora);
         }
@@ -234,12 +237,21 @@ class Portabilidade extends \yii\db\ActiveRecord
 
     private function addNonoDigito($ddd)
     {
-        $ddd = (string) $ddd;
+        $ddd = (string)$ddd;
         $dddNaoAceitaNono = "31, 32, 33, 34, 35, 37, 38, 71, 73, 74, 75, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51, 53, 54, 55, 61,62, 63, 64, 65, 66, 67, 68, 69";
-        if(strpos($dddNaoAceitaNono, $ddd) == ""){
+        if (strpos($dddNaoAceitaNono, $ddd) == "") {
             return true;
-        }else{
+        } else {
             return false;
         }
+    }
+
+    private function saveLogger($phone, $saved = "no")
+    {
+        $logger = new Loggers();
+        $logger->phone = $phone;
+        $logger->found = $saved;
+
+        return $logger->save();
     }
 }

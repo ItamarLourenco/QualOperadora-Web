@@ -4,19 +4,17 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Operadoras */
+/* @var $model app\models\Loggers */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="operadoras-form">
+<div class="loggers-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'operadora')->textInput(['maxlength' => 100]) ?>
+    <?= $form->field($model, 'phone')->textInput(['maxlength' => 100]) ?>
 
-    <?= $form->field($model, 'spid')->textInput(['maxlength' => 100]) ?>
-
-    <?= $form->field($model, 'rn1')->textInput(['maxlength' => 100]) ?>
+    <?= $form->field($model, 'found')->dropDownList([ 'yes' => 'Yes', 'no' => 'No', ], ['prompt' => '']) ?>
 
     <?= $form->field($model, 'created_at')->textInput() ?>
 

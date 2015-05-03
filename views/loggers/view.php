@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Portabilidade */
+/* @var $model app\models\Loggers */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Portabilidades'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Loggers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="portabilidade-view">
+<div class="loggers-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,11 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'phone',
-            'rn1',
-            'date',
-            'operations',
-            'cnl',
-            'eot',
+            'found',
             'created_at',
         ],
     ]) ?>

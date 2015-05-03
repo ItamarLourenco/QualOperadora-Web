@@ -19,7 +19,7 @@ class LoggersSearch extends Loggers
     {
         return [
             [['id'], 'integer'],
-            [['phone', 'found', 'operadora', 'created_at'], 'safe'],
+            [['phone', 'found', 'operadora', 'json', 'created_at'], 'safe'],
         ];
     }
 

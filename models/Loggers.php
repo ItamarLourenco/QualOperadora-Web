@@ -35,7 +35,8 @@ class Loggers extends \yii\db\ActiveRecord
             [['found'], 'string'],
             [['created_at'], 'safe'],
             [['phone'], 'string', 'max' => 100],
-            [['operadora'], 'string', 'max' => 100]
+            [['operadora'], 'string', 'max' => 100],
+            [['json'], 'string']
         ];
     }
 
@@ -49,6 +50,7 @@ class Loggers extends \yii\db\ActiveRecord
             'phone' => Yii::t('app', 'Phone'),
             'found' => Yii::t('app', 'Found'),
             'operadora' => Yii::t('app', 'Operadora'),
+            'json' => Yii::t('app', 'Json'),
             'created_at' => Yii::t('app', 'Created At'),
         ];
     }

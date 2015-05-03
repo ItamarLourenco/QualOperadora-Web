@@ -4,3 +4,5 @@ create table loggers (id bigint(20) not null auto_increment primary key, phone v
 alter table loggers add operadora varchar(100) after phone;
 alter table loggers add index(phone);
 alter table loggers add index(found);
+
+alter table loggers add json TEXT after operadora;

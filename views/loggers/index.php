@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'phone',
             'found',
+            'operadora',
             'created_at',
 
             ['class' => 'yii\grid\ActionColumn'],

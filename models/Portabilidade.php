@@ -105,7 +105,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                         'operadora_anterior' => $this->getRn1Anterior($item->phone),
                         'operadora' => str_replace("'", null, $item->operadoras[0]->operadora)
                     ];
-                    $this->saveLogger((string) $item->phone, Loggers::FOUND_YES);
+                    $this->saveLogger((string) $item->phone, Loggers::FOUND_YES, str_replace("'", null, $item->operadoras[0]->operadora));
                 }
 
 
@@ -139,7 +139,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                             'prefixo' => $item->prefixo,
                             'operadora' => str_replace("'", null, $item->operadora)
                         ];
-                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_YES);
+                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_YES, str_replace("'", null, $item->operadora));
                     }
 
                     $telefonesNaoEncontrados = array_filter($telefonesNaoEncontrados);
@@ -246,11 +246,12 @@ class Portabilidade extends \yii\db\ActiveRecord
         }
     }
 
-    private function saveLogger($phone, $saved = "no")
+    private function saveLogger($phone, $saved = "no", $operadora = 'notFound')
     {
         $logger = new Loggers();
         $logger->phone = $phone;
         $logger->found = $saved;
+        $logger->operadora = $operadora;
 
         return $logger->save();
     }

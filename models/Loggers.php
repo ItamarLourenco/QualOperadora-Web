@@ -34,7 +34,8 @@ class Loggers extends \yii\db\ActiveRecord
         return [
             [['found'], 'string'],
             [['created_at'], 'safe'],
-            [['phone'], 'string', 'max' => 100]
+            [['phone'], 'string', 'max' => 100],
+            [['operadora'], 'string', 'max' => 100]
         ];
     }
 
@@ -47,6 +48,7 @@ class Loggers extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'phone' => Yii::t('app', 'Phone'),
             'found' => Yii::t('app', 'Found'),
+            'operadora' => Yii::t('app', 'Operadora'),
             'created_at' => Yii::t('app', 'Created At'),
         ];
     }

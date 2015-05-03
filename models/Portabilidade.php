@@ -195,7 +195,8 @@ class Portabilidade extends \yii\db\ActiveRecord
         $prefixos = Prefixos::find()->select(['prefixos.id', 'prefixos.operadora', 'prefixos.rn1', 'prefixos.ddd', 'prefixos.uf', 'prefixos.prefixo']);
         foreach($telefonesNaoPortadosComDDD As $item)
         {
-            $prefixos->orWhere(['ddd' => $item['ddd'], 'prefixo' => $item['prefixo']]);
+            $prefixos->orWhere(['ddd' => $item['ddd']]);
+            $prefixos->orFilterWhere(['like', 'prefixo', '%'.$item['prefixo'].'%']);
         }
         $prefixos->groupBy('prefixo');
 

@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Exception;
+use yii\helpers\Json;
 
 
 /**
@@ -23,7 +24,6 @@ class Portabilidade extends \yii\db\ActiveRecord
 
     const security = "#@qu4l0pe4d0r4@#";
     private $telefone = array();
-    private $json = "";
     /**
      * @inheritdoc
      */
@@ -75,14 +75,6 @@ class Portabilidade extends \yii\db\ActiveRecord
         return $this->telefone;
     }
 
-    public function setJson($json){
-        $this->json = $json;
-    }
-
-    public function getJson(){
-        return $this->json;
-    }
-
     public function getPortabilidade(){
         $dataJson['status'] = false;
         $dataJson['message'] = "notFound";
@@ -114,7 +106,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                         'operadora_anterior' => $this->getRn1Anterior($item->phone),
                         'operadora' => str_replace("'", null, $item->operadoras[0]->operadora)
                     ];
-                    $this->saveLogger((string) $item->phone, Loggers::FOUND_YES, str_replace("'", null, $item->operadoras[0]->operadora), $this->getJson());
+                    $this->saveLogger((string) $item->phone, Loggers::FOUND_YES, str_replace("'", null, $item->operadoras[0]->operadora));
                 }
 
 
@@ -148,7 +140,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                             'prefixo' => $item->prefixo,
                             'operadora' => str_replace("'", null, $item->operadora)
                         ];
-                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_YES, str_replace("'", null, $item->operadora), $this->getJson());
+                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_YES, str_replace("'", null, $item->operadora));
                     }
 
                     $telefonesNaoEncontrados = array_filter($telefonesNaoEncontrados);
@@ -159,7 +151,7 @@ class Portabilidade extends \yii\db\ActiveRecord
                             'portabilidade' => false,
                             'encontrado' => false,
                         ];
-                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_NO, null, $this->getJson());
+                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_NO, null);
                     }
 
                 }
@@ -255,13 +247,13 @@ class Portabilidade extends \yii\db\ActiveRecord
         }
     }
 
-    private function saveLogger($phone, $saved = "no", $operadora = 'notFound', $json)
+    private function saveLogger($phone, $saved = "no", $operadora = 'notFound')
     {
         $logger = new Loggers();
         $logger->phone = $phone;
         $logger->found = $saved;
         $logger->operadora = $operadora;
-        $logger->json = $json;
+        $logger->json = json_encode(Json::getJson());
 
         return $logger->save();
     }

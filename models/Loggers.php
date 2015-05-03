@@ -36,7 +36,7 @@ class Loggers extends \yii\db\ActiveRecord
             [['created_at'], 'safe'],
             [['phone'], 'string', 'max' => 100],
             [['operadora'], 'string', 'max' => 100],
-            [['json'], 'string']
+            [['json'], 'string', 'max' => 3000]
         ];
     }
 

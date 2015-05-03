@@ -20,7 +20,6 @@ class PortabilidadeController extends Controller
             {
                 $portabilidade = new Portabilidade();
                 $portabilidade->setTelefone($json['phones']);
-                $portabilidade->setJson($json);
                 echo Json::encode($portabilidade->getPortabilidade());
             }
         }

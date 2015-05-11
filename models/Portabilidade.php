@@ -210,7 +210,6 @@ class Portabilidade extends \yii\db\ActiveRecord
                         ->innerJoinWith('operadoras', ['rn1' => 'rn1']);
         foreach($telefonesNaoPortadosComDDD As $item)
         {
-            print_r($item);
             $prefixos->orWhere(['ddd' => $item['ddd']])->andFilterWhere(['like', 'prefixo', $item['prefixo']]);
         }
         $prefixos->groupBy('prefixo');

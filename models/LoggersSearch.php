@@ -19,7 +19,7 @@ class LoggersSearch extends Loggers
     {
         return [
             [['id'], 'integer'],
-            [['phone', 'found', 'operadora', 'json', 'created_at'], 'safe'],
+            [['phone', 'found', 'operadora', 'json', 'version', 'created_at'], 'safe'],
         ];
     }
 
@@ -61,7 +61,8 @@ class LoggersSearch extends Loggers
         ]);
 
         $query->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'found', $this->found]);
+            ->andFilterWhere(['like', 'found', $this->found])
+            ->andFilterWhere(['like', 'version', $this->version]);
 
         return $dataProvider;
     }

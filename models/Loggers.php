@@ -17,6 +17,7 @@ class Loggers extends \yii\db\ActiveRecord
 
     const FOUND_YES = "yes";
     const FOUND_NO = "no";
+    const VERSION = 1;
 
     /**
      * @inheritdoc

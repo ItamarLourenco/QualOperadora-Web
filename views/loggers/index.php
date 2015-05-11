@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'found',
             'operadora',
             'json',
+            'version',
             'created_at',
 
             ['class' => 'yii\grid\ActionColumn'],

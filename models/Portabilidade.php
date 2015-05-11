@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\Json;
+use yii\log\Logger;
 
 
 /**
@@ -118,7 +119,19 @@ class Portabilidade extends \yii\db\ActiveRecord
                     $telefonesNaoPortadosComDDD = array();
                     foreach($telefonesNaoPortados As $i => $item)
                     {
+
+                        if(substr($item, 0, 1) == '0')
+                        {
+                            $item = substr($item, 1);
+                        }
+
+                        if(strlen($item) >= 11) //Com nono
+                        {
+                            $item = substr($item, -11);
+                        }
+
                         $ddd = substr($item, 0, 2);
+
                         $telefonesNaoPortadosComDDD[$i]['ddd'] = $ddd;
                         $prefixos = $this->getPrefixo($item);
                         $telefonesNaoPortadosComDDD[$i]['prefixo'] = $prefixos;
@@ -180,22 +193,25 @@ class Portabilidade extends \yii\db\ActiveRecord
         $phone = substr($item, -8);
         $phone = substr($phone, 0, 4);
 
-        if(substr($item, -9, 1) == '9')
-        {
-            return '9'.$phone;
-        }
-        else
-        {
-            return $phone;
-        }
+        $phone = str_replace('*', null, $phone);
+        $phone = str_replace('+', null, $phone);
+
+        return $phone;
     }
 
+    /**
+     * @param $telefonesNaoPortadosComDDD
+     * @return static
+     * Para caso de emergencia esse metodos apenas irá receber um telefone.
+     */
     private function getNaoPortados($telefonesNaoPortadosComDDD)
     {
-        $prefixos = Prefixos::find()->select(['prefixos.id', 'prefixos.operadora', 'prefixos.rn1', 'prefixos.ddd', 'prefixos.uf', 'prefixos.prefixo']);
+        $prefixos = Prefixos::find()->select(['prefixos.id', 'operadoras.operadora', 'prefixos.rn1', 'prefixos.ddd', 'prefixos.uf', 'prefixos.prefixo'])
+                        ->innerJoinWith('operadoras', ['rn1' => 'rn1']);
         foreach($telefonesNaoPortadosComDDD As $item)
         {
-            $prefixos->orWhere(['ddd' => $item['ddd'], 'prefixo' => $item['prefixo']]);
+            print_r($item);
+            $prefixos->orWhere(['ddd' => $item['ddd']])->andFilterWhere(['like', 'prefixo', $item['prefixo']]);
         }
         $prefixos->groupBy('prefixo');
 
@@ -253,6 +269,7 @@ class Portabilidade extends \yii\db\ActiveRecord
         $logger->phone = $phone;
         $logger->found = $saved;
         $logger->operadora = $operadora;
+        $logger->version = Loggers::VERSION;
         $logger->json = json_encode(Json::getJson());
 
         return $logger->save();

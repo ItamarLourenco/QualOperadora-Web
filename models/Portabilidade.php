@@ -142,18 +142,21 @@ class Portabilidade extends \yii\db\ActiveRecord
 
                     foreach($prefixos->all() as $i => $item)
                     {
-                        $telefonesNaoEncontrados[$telefonesNaoPortados[$i]] = false;
-                        $dataJson['data'][] = [
-                            'phone' => (string) $telefonesNaoPortados[$i],
-                            'portabilidade' => false,
-                            'encontrado' => true,
-                            'uf' => $item->uf,
-                            'ddd' => $item->ddd,
-                            'rn1' => $item->rn1,
-                            'prefixo' => $item->prefixo,
-                            'operadora' => str_replace("'", null, $item->operadora)
-                        ];
-                        $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_YES, str_replace("'", null, $item->operadora));
+                        if(isset($telefonesNaoPortados[$i]))
+                        {
+                            $telefonesNaoEncontrados[$telefonesNaoPortados[$i]] = false;
+                            $dataJson['data'][] = [
+                                'phone' => (string) $telefonesNaoPortados[$i],
+                                'portabilidade' => false,
+                                'encontrado' => true,
+                                'uf' => $item->uf,
+                                'ddd' => $item->ddd,
+                                'rn1' => $item->rn1,
+                                'prefixo' => $item->prefixo,
+                                'operadora' => str_replace("'", null, $item->operadora)
+                            ];
+                            $this->saveLogger((string) $telefonesNaoPortados[$i], Loggers::FOUND_YES, str_replace("'", null, $item->operadora));
+                        }
                     }
 
                     $telefonesNaoEncontrados = array_filter($telefonesNaoEncontrados);

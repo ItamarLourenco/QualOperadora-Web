@@ -69,6 +69,20 @@ class Portabilidade extends \yii\db\ActiveRecord
 
 
     public function setTelefone($telefone){
+        /**
+         REMOVER
+         */
+        foreach($telefone As $i => $item)
+        {
+            if(strlen($item) == 8)
+            {
+                $telefone[$i] = '11'.$item;
+            }
+        }
+        /**
+        REMOVER
+         */
+
         $this->telefone = $telefone;
     }
 

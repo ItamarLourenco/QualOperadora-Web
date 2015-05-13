@@ -69,20 +69,6 @@ class Portabilidade extends \yii\db\ActiveRecord
 
 
     public function setTelefone($telefone){
-        /**
-         REMOVER
-         */
-        foreach($telefone As $i => $item)
-        {
-            if(strlen($item) == 8)
-            {
-                $telefone[$i] = '11'.$item;
-            }
-        }
-        /**
-        REMOVER
-         */
-
         $this->telefone = $telefone;
     }
 
@@ -227,7 +213,11 @@ class Portabilidade extends \yii\db\ActiveRecord
                         ->innerJoinWith('operadoras', ['rn1' => 'rn1']);
         foreach($telefonesNaoPortadosComDDD As $item)
         {
-            $prefixos->orWhere(['ddd' => $item['ddd']])->andFilterWhere(['like', 'prefixo', $item['prefixo']]);
+            if($this->addNonoDigito($item['ddd'])){
+                $item['prefixo'] = '9'.$item['prefixo'];
+            }
+            
+            $prefixos->orWhere(['ddd' => $item['ddd']])->andFilterWhere(['prefixo' => $item['prefixo']]);
         }
         $prefixos->groupBy('prefixo');
 
